@@ -322,4 +322,5 @@ var Game = function () {
     this.gameOver = gameOver
     this.addTailLines = addTailLines
     this.addScore = addScore
+    this.generataBottomLine = generataBottomLine
 }

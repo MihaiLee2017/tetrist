@@ -110,18 +110,18 @@ var Local = function (socket) {
     socket.on('start', function () {
         var count = 3
         var starter = null
-        // document.getElementById('waiting').innerHTML = count + '秒后开始'
-        // starter = setInterval(function () {
-        //     count--
-        //     document.getElementById('waiting').innerHTML = count + '秒后开始'
-        //     if (count == 0) {
-        //         clearInterval(starter)
-        //         document.getElementById('waiting').innerHTML = '开始'
-        //         start()
-        //     }
-        // }, 1000)
-        document.getElementById('waiting').innerHTML = '开始'
-        start()
+        document.getElementById('waiting').innerHTML = count + '秒后开始'
+        starter = setInterval(function () {
+            count--
+            document.getElementById('waiting').innerHTML = count + '秒后开始'
+            if (count == 0) {
+                clearInterval(starter)
+                document.getElementById('waiting').innerHTML = '开始'
+                start()
+            }
+        }, 1000)
+        // document.getElementById('waiting').innerHTML = '开始'
+        // start()
     })
     socket.on('lose', function () {
         game.gameOver(false)

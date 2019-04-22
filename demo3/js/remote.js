@@ -36,6 +36,9 @@ var Remote = function (socket) {
         socket.on('lose', function () {
             game.gameOver(true)
         })
+        socket.on('addTailLines', function (data) {
+            game.addTailLines(data)
+        })
     }
     var start = function (type, dir) {
         var doms = {

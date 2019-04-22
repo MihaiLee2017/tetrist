@@ -12,9 +12,13 @@ let bindListener = function (socket, event) {
     socket.on(event, function (data) {
         // console.log("event data", event, data)
         if (socket.clientNum % 2 == 0) {
-            socketMap[socket.clientNum - 1].emit(event, data)
+            if (socketMap[socket.clientNum - 1]) {
+                socketMap[socket.clientNum - 1].emit(event, data)
+            }
         } else {
-            socketMap[socket.clientNum + 1].emit(event, data)
+            if (socketMap[socket.clientNum + 1]) {
+                socketMap[socket.clientNum + 1].emit(event, data)
+            }
         }
     })
 
@@ -26,8 +30,12 @@ io.on('connection', function (socket) {
     if (clientCount % 2 == 1) {
         socket.emit('waiting', 'waiting for another person')
     } else {
-        socket.emit('start')
-        socketMap[(clientCount - 1)].emit('start')
+        if (socketMap[(clientCount - 1)]) {
+            socket.emit('start')
+            socketMap[(clientCount - 1)].emit('start')
+        } else {
+            socket.emit('leave')
+        }
     }
     bindListener(socket, 'init')
     bindListener(socket, 'next')
@@ -42,6 +50,11 @@ io.on('connection', function (socket) {
     bindListener(socket, 'line')
     bindListener(socket, 'time')
     bindListener(socket, 'lose')
+    bindListener(socket, 'bottomLines')
+    bindListener(socket, 'addTailLines')
+    bindListener(socket, 'pause')
+    bindListener(socket, 'restart')
+
     // bindListener(socket, 'setTime')
     socket.on('disconnect', function () {
         // clientCount--
@@ -50,7 +63,6 @@ io.on('connection', function (socket) {
                 socketMap[socket.clientNum - 1].emit('leave')
             }
         } else {
-
             if (socketMap[socket.clientNum + 1]) {
                 socketMap[socket.clientNum + 1].emit('leave')
             }
